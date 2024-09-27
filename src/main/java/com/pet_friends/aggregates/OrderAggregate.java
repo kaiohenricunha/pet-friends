@@ -13,6 +13,11 @@ import org.springframework.stereotype.Component;
 public class OrderAggregate {
 
     private final OrderCommandService orderCommandService;
+    
+    // Internal state of the aggregate
+    private String orderId;
+    private String product;
+    private int quantity;
 
     /**
      * Constructs the OrderAggregate with the provided OrderCommandService.
@@ -32,6 +37,35 @@ public class OrderAggregate {
      */
     public OrderCreatedEvent handle(CreateOrderCommand command) {
         // Use the OrderCommandService to handle the command
-        return orderCommandService.handleCreateOrderCommand(command);
+        OrderCreatedEvent event = orderCommandService.handleCreateOrderCommand(command);
+        
+        // Apply the event to update the aggregate state
+        apply(event);
+        
+        return event;
+    }
+
+    /**
+     * Applies the OrderCreatedEvent to update the state of the aggregate.
+     *
+     * @param event The event representing the creation of an order.
+     */
+    public void apply(OrderCreatedEvent event) {
+        this.orderId = event.getOrderId();
+        this.product = event.getProduct();
+        this.quantity = event.getQuantity();
+    }
+
+    // Getters for aggregate state (for demonstration purposes)
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 }
