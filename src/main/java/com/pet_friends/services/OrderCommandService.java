@@ -1,7 +1,9 @@
 package com.pet_friends.services;
 
 import com.pet_friends.commands.CreateOrderCommand;
+import com.pet_friends.entities.Order;
 import com.pet_friends.events.OrderCreatedEvent;
+import com.pet_friends.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,17 +17,19 @@ import java.util.List;
 public class OrderCommandService {
 
     private final List<OrderCreatedEvent> orders = new ArrayList<>();
-
     private final OrderQueryService orderQueryService;
+    private final OrderRepository orderRepository;
 
     /**
-     * Constructs the OrderCommandService with the provided OrderQueryService.
+     * Constructs the OrderCommandService with the provided services and repository.
      *
      * @param orderQueryService The service for querying order events.
+     * @param orderRepository   The repository for persisting orders.
      */
     @Autowired
-    public OrderCommandService(OrderQueryService orderQueryService) {
+    public OrderCommandService(OrderQueryService orderQueryService, OrderRepository orderRepository) {
         this.orderQueryService = orderQueryService;
+        this.orderRepository = orderRepository;
     }
 
     /**
@@ -47,6 +51,10 @@ public class OrderCommandService {
 
         // Add the event to the query service
         orderQueryService.addOrderEvent(orderCreatedEvent);
+
+        // Save the order entity to the database
+        Order order = new Order(orderCreatedEvent.getOrderId(), orderCreatedEvent.getProduct(), orderCreatedEvent.getQuantity());
+        orderRepository.save(order);
 
         // Return the created event as a response
         return orderCreatedEvent;
