@@ -57,4 +57,13 @@ public class OrderQueryService {
     public Optional<OrderEntity> getOrderEntityById(String orderId) {
         return orderRepository.findById(orderId);
     }
+
+    /**
+     * Retrieves all persisted orders.
+     *
+     * @return A list of all OrderEntity objects.
+     */
+    public List<OrderEntity> getAllOrders() {
+        return orderRepository.findAll();
+    }
 }
