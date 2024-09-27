@@ -49,12 +49,12 @@ public class OrderQueryService {
     }
 
     /**
-     * Retrieves an order by its ID.
+     * Retrieves an order entity by its ID.
      *
      * @param orderId The ID of the order to retrieve.
      * @return An Optional containing the found OrderEntity or empty if not found.
      */
-    public Optional<OrderEntity> getOrderById(String orderId) {
+    public Optional<OrderEntity> getOrderEntityById(String orderId) {
         return orderRepository.findById(orderId);
     }
 }
