@@ -10,7 +10,6 @@ import java.util.UUID;
 public abstract class BaseEvent {
     private final String id;
     private final Instant timestamp;
-
     /**
      * Constructs a new BaseEvent with a unique ID and the current timestamp.
      */
@@ -18,7 +17,6 @@ public abstract class BaseEvent {
         this.id = UUID.randomUUID().toString();
         this.timestamp = Instant.now();
     }
-
     /**
      * Gets the unique identifier of the event.
      *
@@ -27,7 +25,6 @@ public abstract class BaseEvent {
     public String getId() {
         return id;
     }
-
     /**
      * Gets the timestamp when the event was created.
      *
