@@ -2,6 +2,7 @@ package com.pet_friends.services;
 
 import com.pet_friends.commands.CreateOrderCommand;
 import com.pet_friends.events.OrderCreatedEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,8 +14,19 @@ import java.util.List;
 @Service
 public class OrderCommandService {
 
-    // Temporary in-memory storage for demonstration purposes
     private final List<OrderCreatedEvent> orders = new ArrayList<>();
+
+    private final OrderQueryService orderQueryService;
+
+    /**
+     * Constructs the OrderCommandService with the provided OrderQueryService.
+     *
+     * @param orderQueryService The service for querying order events.
+     */
+    @Autowired
+    public OrderCommandService(OrderQueryService orderQueryService) {
+        this.orderQueryService = orderQueryService;
+    }
 
     /**
      * Executes the given CreateOrderCommand.
@@ -33,7 +45,10 @@ public class OrderCommandService {
         // Simulate persisting the event to an event store
         orders.add(orderCreatedEvent);
 
-        // For now, we return the created event as a response
+        // Add the event to the query service
+        orderQueryService.addOrderEvent(orderCreatedEvent);
+
+        // Return the created event as a response
         return orderCreatedEvent;
     }
 
