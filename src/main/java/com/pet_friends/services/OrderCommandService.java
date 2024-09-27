@@ -1,7 +1,7 @@
 package com.pet_friends.services;
 
 import com.pet_friends.commands.CreateOrderCommand;
-import com.pet_friends.entities.Order;
+import com.pet_friends.entities.OrderEntity;
 import com.pet_friends.events.OrderCreatedEvent;
 import com.pet_friends.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,8 +53,8 @@ public class OrderCommandService {
         orderQueryService.addOrderEvent(orderCreatedEvent);
 
         // Save the order entity to the database
-        Order order = new Order(orderCreatedEvent.getOrderId(), orderCreatedEvent.getProduct(), orderCreatedEvent.getQuantity());
-        orderRepository.save(order);
+        OrderEntity orderEntity = new OrderEntity(orderCreatedEvent.getOrderId(), orderCreatedEvent.getProduct(), orderCreatedEvent.getQuantity());
+        orderRepository.save(orderEntity);
 
         // Return the created event as a response
         return orderCreatedEvent;
